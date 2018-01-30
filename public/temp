@@ -1,0 +1,141 @@
+import React from 'react';
+import FlatButton from 'material-ui/FlatButton';
+import './MysticBoard.css';
+
+// Declare variables
+const board = [];
+const boardSize = 3;
+const mysticSquareCount = boardSize ** 2;
+let row = 0;
+let column = 1;
+let empty = false;
+
+// Create array of Mystic Squares
+Array(mysticSquareCount).fill().map((_, i) => {
+  let squareValue = i + 1;
+  // First cell of each row increment row no. & reset column count
+  if (i % boardSize === 0) {
+    row++;
+    column = 1;
+  };
+  // Configure values for empty square
+  if (squareValue === mysticSquareCount) {
+    squareValue = ' ';
+    empty = true;
+  };
+  column++;
+  return board.push({
+    'value': squareValue,
+    'row': row,
+    'column': column - 1,
+    'empty': empty,
+  });
+});
+
+const locateEmptySquare = () => {
+  return board.findIndex(x => x.empty === true);
+}
+
+const swapSquare = (board, a, b) => {
+  board[a] = board.splice(b, 1, board[a])[0];
+  console.log(board);
+}
+
+const selectSquare = (square, index) => {
+  let selectedRow = square.row;
+  let selectedColumn = square.column;
+  let emptySquareIndex = locateEmptySquare();
+  let emptySquareRow = board[emptySquareIndex].row;
+  let emptySquareColumn = board[emptySquareIndex].column;
+
+  // Check if selected square is moveable
+  const squareIsMoveable = () => {
+    if (index === emptySquareIndex) return false;
+    if (((emptySquareRow - selectedRow) === -1) || ((emptySquareRow - selectedRow) === 1)) {
+      if (emptySquareColumn === selectedColumn) {
+        console.log('is-moveable');
+        return true;
+      }
+      else {
+        // square is immovable
+        console.log('is-immovable');
+        return false;
+      }
+    }
+    else if (((emptySquareColumn - selectedColumn) === -1) || ((emptySquareColumn - selectedColumn) === 1)) {
+      if (emptySquareRow === selectedRow) {
+        console.log('is-moveable');
+        return true;
+      }
+      else {
+        // square is immovable
+        console.log('is-immovable');
+        return false;
+      }
+    }
+    else {
+      // square is immovable
+      console.log('is-immovable');
+      return false;
+    }
+  };
+
+  if (squareIsMoveable()) {
+    swapSquare(board, index, emptySquareIndex);
+  };
+}
+
+
+class MysticSquares extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      board: board.map((square, index) =>
+      <li
+        key={index}
+        className="mystic-board_square">
+        <FlatButton
+          onTouchTap={() => { selectSquare(square, index) }}
+          label={square.value}
+          className="mystic-board_square-button"
+          fullWidth={true} />
+      </li>
+      ),
+    };
+  }
+
+
+  render() {
+   return this.state.squares;
+  }
+}
+
+
+class MysticBoard extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      squares: MysticSquares,
+    };
+  }
+
+  componentDidMount() {
+  }
+
+  componentWillUnmount() {
+  }
+
+  // updateSquares() {
+  //   this.setState({
+  //     squares: squares,
+  //   });
+  // }
+
+  render() {
+    return (
+      <ul className="mystic-board"><MysticSquares /></ul>
+    );
+  }
+}
+
+export default MysticBoard;

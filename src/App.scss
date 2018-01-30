@@ -1,0 +1,36 @@
+.App {
+  text-align: center;
+  max-height: 100vh;
+  overflow-y: hidden;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 10vh;
+}
+
+.App-header {
+  background-color: #222;
+  display: flex;
+  padding: 10px;
+  color: white;
+}
+
+.App-title {
+  font-size: calc(2vw + 2vh + 1vmin) !important;
+  line-height: 10vh;
+  margin: 0;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
